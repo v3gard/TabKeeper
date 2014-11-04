@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:text="Name"
+        android:padding="5dp"
+        android:id="@+id/historic_cart_name"
+        android:layout_weight="1"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Amount"
+        android:padding="5dp"
+        android:id="@+id/historic_cart_size"
+        android:layout_gravity="right"
+        android:textColor="@android:color/white"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sum"
+        android:padding="5dp"
+        android:id="@+id/historic_cart_sum"
+        android:layout_gravity="right"
+        android:textColor="@android:color/white" />
+</TableRow>

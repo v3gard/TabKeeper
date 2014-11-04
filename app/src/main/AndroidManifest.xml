@@ -40,6 +40,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="at.haugland.cbtab.MainActivity" />
         </activity>
+        <activity
+            android:name="at.haugland.cbtab.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName="at.haugland.cbtab.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="at.haugland.cbtab.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

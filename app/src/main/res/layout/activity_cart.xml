@@ -7,8 +7,75 @@
     tools:context="at.haugland.cbtab.CartActivity"
     android:background="#ff2d2d2d">
 
-    <TextView android:text="Her vises &quot;handlelista&quot;. Altså alle ting som har blitt kjøpt på en kveld" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/hello_cart" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/cart_linearLayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ingen barregning er opprettet"
+                android:id="@+id/cart_name_date"
+                android:textColor="@android:color/white"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Totalt: 0 kr,-"
+                android:id="@+id/cart_total_sum"
+                android:layout_gravity="right"
+                android:textColor="@android:color/white"  />
+        </LinearLayout>
+
+        <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/cart_list"
+            android:layout_below="@+id/cart_linearLayout"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cart_list"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center_horizontal|bottom"
+            android:gravity="center_horizontal|bottom"
+            android:layout_marginBottom="15dp">
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sett som betalt"
+                android:id="@+id/cart_btn_toggle_paid"
+                android:textOn="Ja"
+                android:textOff="Nei"
+                android:checked="false"
+                android:textColor="@android:color/white" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Betalt!"
+                android:id="@+id/cart_btn_set_paid"
+                android:enabled="false"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

@@ -2,18 +2,17 @@
 <resources>
 
     <string name="app_name">TabKeeper</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Innstillinger</string>
     <string name="icon_beer"></string>
     <string name="icon_cart"></string>
     <string name="icon_history"></string>
-    <string name="title_activity_menu">MenuActivity</string>
-    <string name="title_activity_cart">CartActivity</string>
-    <string name="title_activity_history">HistoryActivity</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Example action</string>
+    <string name="title_activity_menu">Meny</string>
+    <string name="title_activity_cart">Barregning</string>
+    <string name="title_activity_history">Historiske barregninger</string>
+    <string name="title_activity_about">Om TabKeeper</string>
+    <string name="navigation_drawer_open">Åpne navigasjonsskuff</string>
+    <string name="navigation_drawer_close">Lukk navigasjonsskuff</string>
+    <string name="item_addnew">Legg til</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

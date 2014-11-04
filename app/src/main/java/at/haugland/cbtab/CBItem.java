@@ -1,37 +1,47 @@
 package at.haugland.cbtab;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Created by vegard on 10/21/14.
  */
 
 public class CBItem
 {
-    private int _id;
-    private String _name;
-    private String _displayName;
-    private String _type;
-    private Float _price; // TODO! be aware of floating point error propagation with addition!
-    private String _description;
-    private CBCategory _category;
+    @Expose private int _id;
+    @Expose private String _name;
+    @Expose private String _displayName;
+    @Expose private String _unit;
+    @Expose private Float _price; // TODO! be aware of floating point error propagation with addition!
+    @Expose private String _description;
+    @Expose private CBCategory _category;
+    @Expose private String _categoryId;
 
     public CBItem(String name)
     {
         this._name = name;
         this._id = -1;
         this._category = null;
+        this._categoryId = null;
         this._displayName = null;
         this._description = null;
         this._price = null;
-        this._type = null;
+        this._unit = null;
     }
+    @Deprecated //Use CBItem(String name, String categoryId) instead
     public CBItem(String name, CBCategory category)
     {
         this._name = name;
-        this._category = category;
+        this._categoryId = category.getName();
+    }
+    public CBItem(String name, String categoryId)
+    {
+        this._name = name;
+        this._categoryId = categoryId;
     }
     public CBCategory getCategory()
     {
-        return _category;
+        return MainActivity.cbmanager.getCategory(_categoryId);
     }
     /*** SETTERS ***/
     public void set_name(String name)
@@ -46,9 +56,9 @@ public class CBItem
     {
         this._displayName = displayName;
     }
-    public void set_type(String type)
+    public void set_unit(String unit)
     {
-        this._type = type;
+        this._unit = unit;
     }
     public void set_price(float price)
     {
@@ -58,13 +68,18 @@ public class CBItem
     {
         this._description = description;
     }
-    public void set_category(String category) throws Exception {
-        this._category = MainActivity.cbmanager.getCategory(category);
-        this._category.addItem(this);
-        if (this._category == null)
+    public void set_category(String categoryId) throws Exception {
+        this._categoryId = categoryId;
+        CBCategory category = MainActivity.cbmanager.getCategory(this._categoryId);
+        if (category == null)
         {
-            throw new Exception("bla");
+            throw new Exception("Unable to find category. Most likely the objects haven't been initialized properly. This might happen if a new category has been added to the CSV file, or the CSV file is unparsable.");
         }
+        else category.addItem(this);
+    }
+    public String getCategoryId()
+    {
+        return _categoryId;
     }
     public String getDisplayName()
     {
@@ -77,5 +92,32 @@ public class CBItem
     public int getId()
     {
         return _id;
+    }
+    public String getUnit()
+    {
+        return _unit;
+    }
+    public String getDisplayUnit()
+    {
+        if (_unit.equalsIgnoreCase("glass"))
+        {
+            return "Glass";
+        }
+        else if (_unit.equalsIgnoreCase(("bottle")))
+        {
+            return "Flaske";
+        }
+        else
+        {
+            return "Enhet";
+        }
+    }
+    public String getDescription()
+    {
+        return _description;
+    }
+    public Float getPrice()
+    {
+        return _price;
     }
 }

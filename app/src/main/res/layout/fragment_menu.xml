@@ -11,14 +11,18 @@
     <TextView android:id="@+id/section_label" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <GridView
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/gridView"
+        android:id="@+id/list"
         android:layout_below="@+id/section_label"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:numColumns="auto_fit"
-        android:choiceMode="singleChoice" />
-
+        android:layout_alignParentStart="true"/>
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FF0000"
+        android:text="No data"
+        />
 </RelativeLayout>

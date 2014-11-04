@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow
+    android:id="@+id/historic_list_header"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:focusable="true"
+    android:focusableInTouchMode="false"
+    android:clickable="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:text="Barregning"
+        android:padding="5dp"
+        android:id="@+id/historic_cart_name"
+        android:layout_weight="1"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enheter"
+        android:padding="5dp"
+        android:id="@+id/historic_cart_size"
+        android:layout_gravity="right"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sum"
+        android:padding="5dp"
+        android:id="@+id/historic_cart_sum"
+        android:layout_gravity="right"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+</TableRow>

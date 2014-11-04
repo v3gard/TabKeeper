@@ -1,5 +1,7 @@
 package at.haugland.cbtab;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 
 /**
@@ -7,24 +9,24 @@ import java.util.ArrayList;
  */
 public class CBCategory
 {
-    private String _name;
-    private String _displayName;
-    private String _icon;
-    private int _sectionNumber;
-    private int _layout;
+    @Expose private String _name;
+    @Expose private String _displayName;
+    @Expose private String _textIcon;
+    @Expose private int _sectionNumber;
+    @Expose private int _imageIcon;
     private ArrayList<CBItem> _items;
 
-    public CBCategory(String name, String displayName, String icon, int sectionNumber)
+    public CBCategory(String name, String displayName, String textIcon, int sectionNumber)
     {
         this._name = name;
         this._displayName = displayName;
-        this._icon = icon;
+        this._textIcon = textIcon;
         this._sectionNumber = sectionNumber;
         _items = new ArrayList<CBItem>();
     }
-    public void setLayout(int layout)
+    public void setImageIcon(int imageIconReference)
     {
-        _layout = layout;
+        _imageIcon = imageIconReference;
     }
     public String getName()
     {
@@ -34,9 +36,9 @@ public class CBCategory
     {
         return _displayName;
     }
-    public int getLayout()
+    public int getImageIcon()
     {
-        return _layout;
+        return _imageIcon;
     }
     public int SectionNumber()
     {
@@ -45,6 +47,10 @@ public class CBCategory
     public void addItem(CBItem item)
     {
         _items.add(item);
+    }
+    public void Clear()
+    {
+        _items = new ArrayList<CBItem>();
     }
     public ArrayList<String> getItemsAsArrayList()
     {

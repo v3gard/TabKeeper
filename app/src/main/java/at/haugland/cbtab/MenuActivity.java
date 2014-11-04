@@ -3,11 +3,12 @@ package at.haugland.cbtab;
 import android.app.Activity;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.graphics.Color;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,10 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -39,12 +41,14 @@ public class MenuActivity extends Activity
     /**
      * Used to store the last selected category.
      */
-    private CBCategory mCategory;
+    private CBCategory _category;
+    private static CBCart _cart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        _cart = MainActivity.cbmanager.getCurrentCart();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -69,8 +73,8 @@ public class MenuActivity extends Activity
     public void onCategoryAttached(int number) {
         // when a category is selected, do the following
         // update the title
-        mCategory = MainActivity.cbmanager.getCategoryBySectionNumber(number);
-        mTitle = mCategory.getDisplayName();
+        _category = MainActivity.cbmanager.getCategoryBySectionNumber(number);
+        mTitle = _category.getDisplayName();
     }
 
     public void restoreActionBar() {
@@ -110,59 +114,6 @@ public class MenuActivity extends Activity
     }
 
     /**
-     * skjønner ikke dette...
-     */
-    public class ButtonAdapter extends BaseAdapter
-    {
-        private Context _context;
-        private CBCategory _category;
-
-        public ButtonAdapter(Context context, CBCategory category)
-        {
-            _context = context;
-            _category = category;
-        }
-        public int getCount()
-        {
-            return _category.getItems().size();
-        }
-        public Object getItem(int position)
-        {
-            return position;
-        }
-        public long getItemId(int position)
-        {
-            return position;
-        }
-        @Override
-        public View getView(int position, final View convertView, ViewGroup parent)
-        {
-            Button btn;
-            if (convertView == null) {
-                btn = new Button(_context);
-                btn.setLayoutParams(new GridView.LayoutParams(190, 190));
-                btn.setPadding(1, 1, 1, 1);
-                btn.setHighlightColor(Color.GREEN);
-                //btn.setId(cbItem.getId());
-                btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(view.getContext(), "blah", Toast.LENGTH_SHORT);
-                    }
-                });
-            }
-            else
-            {
-                btn = (Button)convertView;
-            }
-            btn.setText(position);
-            btn.setTextColor(Color.WHITE);
-            btn.setId(position);
-            return btn;
-        }
-    }
-
-    /**
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
@@ -187,22 +138,117 @@ public class MenuActivity extends Activity
         public PlaceholderFragment() {
         }
 
+        private class CBCategoryAdapter extends BaseAdapter
+        {
+            LayoutInflater _layoutInflater;
+            CBCategory _cbCategory;
+
+            public CBCategoryAdapter(Context context, int textViewResourceId, CBCategory cbCategory)
+            {
+                _layoutInflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                _cbCategory = cbCategory;
+            }
+            @Override
+            public int getCount()
+            {
+                return _cbCategory.getItems().size();
+            }
+            @Override
+            public CBItem getItem(int position)
+            {
+                return _cbCategory.getItems().get(position);
+            }
+            @Override
+            public long getItemId(int position)
+            {
+                return 0;
+            }
+            public View getView(int position, View convertView, ViewGroup parent)
+            {
+                CBCategoryViewHolder cbCategoryViewHolder;
+                if (convertView==null)
+                {
+                    convertView = _layoutInflater.inflate(R.layout.activity_menu_list_item, null);
+                    cbCategoryViewHolder = new CBCategoryViewHolder();
+                    convertView.setTag(cbCategoryViewHolder);
+                }
+                else
+                {
+                    cbCategoryViewHolder = (CBCategoryViewHolder) convertView.getTag();
+                }
+                cbCategoryViewHolder.tvDisplayName = detail(convertView, R.id.item_displayName, _cbCategory.getItems().get(position).getDisplayName());
+                cbCategoryViewHolder.tvUnit = detail(convertView, R.id.item_unit, _cbCategory.getItems().get(position).getDisplayUnit());
+                cbCategoryViewHolder.tvPrice = detail(convertView, R.id.item_price, String.format("%s kr", _cbCategory.getItems().get(position).getPrice().toString()));
+                cbCategoryViewHolder.ivIcon = detail(convertView, R.id.item_icon, _cbCategory.getImageIcon());
+
+                return convertView;
+            }
+            private class CBCategoryViewHolder
+            {
+                ImageView ivIcon;
+                TextView tvDisplayName, tvUnit, tvPrice;
+            }
+            private TextView detail(View v, int resourceId, String text)
+            {
+                TextView tv = (TextView) v.findViewById(resourceId);
+                tv.setText(text);
+                return tv;
+            }
+            private ImageView detail(View v, int resourceId, int icon)
+            {
+                ImageView iv = (ImageView) v.findViewById(resourceId);
+                iv.setImageResource(icon);
+                return iv;
+            }
+
+        }
+
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_menu, container, false);
-            GridView gridView =(GridView) rootView.findViewById(R.id.gridView);
             int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             CBCategory cbCategory = MainActivity.cbmanager.getCategoryBySectionNumber(sectionNumber);
-
-            //ButtonAdapter adapter = new ButtonAdapter(rootView.getContext(), cbCategory);
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(), cbCategory.getLayout(), cbCategory.getItemsAsArrayList());
-            gridView.setAdapter(adapter);
-            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            ListView listView = (ListView) rootView.findViewById(R.id.list);
+            TextView textView = (TextView) rootView.findViewById(R.id.empty);
+            textView.setVisibility(View.INVISIBLE);
+            final CBCategoryAdapter adapter = new CBCategoryAdapter(rootView.getContext(), R.layout.activity_menu_list_item, cbCategory);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    {}
+                public void onItemClick(AdapterView<?> adapterView, final View view, int i, long l) {
+                    final CBItem item = (CBItem) adapter.getItem(i);
+                    View npView = inflater.inflate(R.layout.selector_numberpicker, null);
+                    final NumberPicker activeItemNumberPicker = (NumberPicker) npView.findViewById(R.id.numberPicker);
+                    TextView activeItemDescription = (TextView) npView.findViewById(R.id.cart_item_description);
+                    activeItemDescription.setText(item.getDescription());
+                    activeItemNumberPicker.setMinValue(1);
+                    activeItemNumberPicker.setMaxValue(100);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setTitle(item.getDisplayName());
+                    builder.setView(npView);
+                    builder.setPositiveButton("Legg til", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            _cart = MainActivity.cbmanager.getCurrentCart();
+                            if (_cart==null)
+                            {
+                                MainActivity.cbmanager.createCart();
+                                _cart = MainActivity.cbmanager.getCurrentCart();
+                                Toast.makeText(view.getContext(), String.format("Opprettet ny barregning"), Toast.LENGTH_SHORT).show();
+                            }
+                            _cart.add(item, activeItemNumberPicker.getValue());
+                            Toast.makeText(view.getContext(), String.format("La til %d %s", activeItemNumberPicker.getValue(), item.getDisplayName()), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    builder.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast t = Toast.makeText(view.getContext(), "avbryt", Toast.LENGTH_SHORT);
+                            t.show();
+                        }
+                    });
+                    builder.create().show();
                 }
             });
             return rootView;

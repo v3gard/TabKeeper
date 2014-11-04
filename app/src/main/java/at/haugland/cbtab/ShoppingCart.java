@@ -1,5 +1,7 @@
 package at.haugland.cbtab;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 
 /**
@@ -7,6 +9,7 @@ import java.util.ArrayList;
  */
 public class ShoppingCart
 {
+    @Expose
     private String _name;
     private ArrayList<String> _items;
     public ShoppingCart(String name)
