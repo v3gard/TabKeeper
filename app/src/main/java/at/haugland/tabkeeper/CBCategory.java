@@ -1,4 +1,11 @@
-package at.haugland.cbtab;
+package at.haugland.tabkeeper;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.google.gson.annotations.Expose;
 
@@ -39,6 +46,10 @@ public class CBCategory
     public int getImageIcon()
     {
         return _imageIcon;
+    }
+    public void setName(String name)
+    {
+        this._name = name;
     }
     public int SectionNumber()
     {

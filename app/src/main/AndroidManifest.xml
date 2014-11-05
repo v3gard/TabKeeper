@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="at.haugland.cbtab" >
+    package="at.haugland.tabkeeper" >
 
     <application
         android:allowBackup="true"
@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="at.haugland.cbtab.MainActivity"
+            android:name="at.haugland.tabkeeper.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,36 +17,36 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="at.haugland.cbtab.MenuActivity"
+            android:name="at.haugland.tabkeeper.MenuActivity"
             android:label="@string/title_activity_menu"
-            android:parentActivityName="at.haugland.cbtab.MainActivity" >
+            android:parentActivityName="at.haugland.tabkeeper.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="at.haugland.cbtab.MainActivity" />
+                android:value="at.haugland.tabkeeper.MainActivity" />
         </activity>
         <activity
-            android:name="at.haugland.cbtab.CartActivity"
+            android:name="at.haugland.tabkeeper.CartActivity"
             android:label="@string/title_activity_cart"
-            android:parentActivityName="at.haugland.cbtab.MainActivity" >
+            android:parentActivityName="at.haugland.tabkeeper.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="at.haugland.cbtab.MainActivity" />
+                android:value="at.haugland.tabkeeper.MainActivity" />
         </activity>
         <activity
-            android:name="at.haugland.cbtab.HistoryActivity"
+            android:name="at.haugland.tabkeeper.HistoryActivity"
             android:label="@string/title_activity_history"
-            android:parentActivityName="at.haugland.cbtab.MainActivity" >
+            android:parentActivityName="at.haugland.tabkeeper.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="at.haugland.cbtab.MainActivity" />
+                android:value="at.haugland.tabkeeper.MainActivity" />
         </activity>
         <activity
-            android:name="at.haugland.cbtab.AboutActivity"
+            android:name="at.haugland.tabkeeper.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName="at.haugland.cbtab.MainActivity" >
+            android:parentActivityName="at.haugland.tabkeeper.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="at.haugland.cbtab.MainActivity" />
+                android:value="at.haugland.tabkeeper.MainActivity" />
         </activity>
     </application>
 

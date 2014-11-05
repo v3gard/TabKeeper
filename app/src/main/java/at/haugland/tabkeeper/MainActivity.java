@@ -1,4 +1,4 @@
-package at.haugland.cbtab;
+package at.haugland.tabkeeper;
 
 import android.app.Activity;
 import android.app.AlertDialog;

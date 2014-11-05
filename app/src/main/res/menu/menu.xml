@@ -1,5 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" tools:context="at.haugland.cbtab.MenuActivity">
+    xmlns:tools="http://schemas.android.com/tools" tools:context="at.haugland.tabkeeper.MenuActivity">
     <item android:id="@+id/item_add_new" android:title="@string/item_addnew"
         android:showAsAction="withText|ifRoom" />
     <item android:id="@+id/action_settings" android:title="@string/action_settings"

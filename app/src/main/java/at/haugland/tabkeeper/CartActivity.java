@@ -1,4 +1,4 @@
-package at.haugland.cbtab;
+package at.haugland.tabkeeper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -79,47 +79,49 @@ public class CartActivity extends Activity {
             }
         });
         // Enable logic when tab item is pressed
-        ListView tabview = (ListView)findViewById(R.id.cart_list);
-        CBCartAdapter adapter = new CBCartAdapter(this, R.layout.activity_cart, _currentCart);
-        tabview.setAdapter(adapter);
+        if (_currentCart != null) {
+            ListView tabview = (ListView) findViewById(R.id.cart_list);
+            CBCartAdapter adapter = new CBCartAdapter(this, R.layout.activity_cart, _currentCart);
+            tabview.setAdapter(adapter);
 
-        tabview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, final int pos, long l) {
-                final CBCart.CBKeyValue cbKeyValue = _currentCart.getItemsAsCBKeyValue().get(pos);
-                final CBItem cbItem = cbKeyValue.getCBItem();
+            tabview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, final int pos, long l) {
+                    final CBCart.CBKeyValue cbKeyValue = _currentCart.getItemsAsCBKeyValue().get(pos);
+                    final CBItem cbItem = cbKeyValue.getCBItem();
 
-                View npView = getLayoutInflater().inflate(R.layout.selector_numberpicker, null);
+                    View npView = getLayoutInflater().inflate(R.layout.selector_numberpicker, null);
 
-                final NumberPicker activeItemNumberPicker = (NumberPicker) npView.findViewById(R.id.numberPicker);
-                TextView activeItemDescription = (TextView) npView.findViewById(R.id.cart_item_description);
-                activeItemDescription.setText(cbItem.getDescription());
-                activeItemNumberPicker.setMinValue(1);
-                activeItemNumberPicker.setMaxValue(100);
-                activeItemNumberPicker.setValue(cbKeyValue.value);
-                activeItemNumberPicker.setSelected(false);
-                AlertDialog.Builder builder = new AlertDialog.Builder(_c);
-                builder.setTitle(cbItem.getDisplayName());
-                builder.setView(npView);
-                builder.setPositiveButton("Endre", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        cbKeyValue.value = activeItemNumberPicker.getValue();
-                        Toast.makeText(getApplicationContext(), String.format("%s: Endret til %d enheter", cbItem.getDisplayName(), activeItemNumberPicker.getValue()), Toast.LENGTH_SHORT).show();
-                        updateCart();
-                    }
-                });
-                builder.setNegativeButton("Slett", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        _currentCart.getItemsAsCBKeyValue().remove(pos);
-                        Toast.makeText(getApplicationContext(), String.format("Fjernet %s fra barregninga", cbItem.getDisplayName()), Toast.LENGTH_SHORT).show();
-                        updateCart();
-                    }
-                });
-                builder.create().show();
-            }
-        });
+                    final NumberPicker activeItemNumberPicker = (NumberPicker) npView.findViewById(R.id.numberPicker);
+                    TextView activeItemDescription = (TextView) npView.findViewById(R.id.cart_item_description);
+                    activeItemDescription.setText(cbItem.getDescription());
+                    activeItemNumberPicker.setMinValue(1);
+                    activeItemNumberPicker.setMaxValue(100);
+                    activeItemNumberPicker.setValue(cbKeyValue.value);
+                    activeItemNumberPicker.setSelected(false);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(_c);
+                    builder.setTitle(cbItem.getDisplayName());
+                    builder.setView(npView);
+                    builder.setPositiveButton("Endre", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            cbKeyValue.value = activeItemNumberPicker.getValue();
+                            Toast.makeText(getApplicationContext(), String.format("%s: Endret til %d enheter", cbItem.getDisplayName(), activeItemNumberPicker.getValue()), Toast.LENGTH_SHORT).show();
+                            updateCart();
+                        }
+                    });
+                    builder.setNegativeButton("Slett", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            _currentCart.getItemsAsCBKeyValue().remove(pos);
+                            Toast.makeText(getApplicationContext(), String.format("Fjernet %s fra barregninga", cbItem.getDisplayName()), Toast.LENGTH_SHORT).show();
+                            updateCart();
+                        }
+                    });
+                    builder.create().show();
+                }
+            });
+        }
     }
 
     public void updateCart()
@@ -141,24 +143,14 @@ public class CartActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_cart, menu);
+        // Pass
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        // Pass
+        return false;
     }
     private class CBCartAdapter extends BaseAdapter
     {
@@ -205,10 +197,6 @@ public class CartActivity extends Activity {
             cbCartViewHolder.tvDisplayName = detail(convertView, R.id.cart_item_name, cbItem.getDisplayName());
             cbCartViewHolder.tvAmount = detail(convertView, R.id.cart_item_amount, String.format("%d",cbValue));
             cbCartViewHolder.tvTotal = detail(convertView, R.id.cart_item_price_sum, String.format("%.2f", cbValue*cbItem.getPrice()));
-            //cbCategoryViewHolder.tvDisplayName = detail(convertView, R.id.item_displayName, _cbCategory.getItems().get(position).getDisplayName());
-            //cbCategoryViewHolder.tvUnit = detail(convertView, R.id.item_unit, _cbCategory.getItems().get(position).getDisplayUnit());
-            //cbCategoryViewHolder.tvPrice = detail(convertView, R.id.item_price, String.format("%s kr", _cbCategory.getItems().get(position).getPrice().toString()));
-            //cbCategoryViewHolder.ivIcon = detail(convertView, R.id.item_icon, _cbCategory.getImageIcon());
 //
             return convertView;
         }

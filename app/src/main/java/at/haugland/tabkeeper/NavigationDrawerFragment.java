@@ -1,9 +1,11 @@
-package at.haugland.cbtab;
+package at.haugland.tabkeeper;
 
 
 import android.app.Activity;
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +22,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -244,9 +249,68 @@ public class NavigationDrawerFragment extends Fragment {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
         if (item.getItemId() == R.id.item_add_new) {
-            Toast.makeText(getActivity(), "Ikke implementert enda..", Toast.LENGTH_SHORT).show();
+
+            LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            final View cbItemView = (View)inflater.inflate(R.layout.dialog_cbitem, null);
+
+            // make views available for reading/writing
+            final TextView tvName = (TextView)cbItemView.findViewById(R.id.newcbItem_Name);
+            final TextView tvDescription = (TextView)cbItemView.findViewById(R.id.newcbItem_Description);
+            final TextView tvPrice = (TextView)cbItemView.findViewById(R.id.newcbItem_price);
+            final Spinner spCategory = (Spinner)cbItemView.findViewById(R.id.newcbItem_category);
+            final Spinner spType = (Spinner)cbItemView.findViewById(R.id.newcbItem_type);
+
+            // Populate spinners
+            final CBCategoryAdapter catAdapter = new CBCategoryAdapter(getActivity().getApplicationContext(), MainActivity.cbmanager.getCategories());
+            spCategory.setAdapter(catAdapter);
+            ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.dialog_cbitem_spinner_item, MainActivity.cbmanager.getTypes());
+            spType.setAdapter(typeAdapter);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Nytt menyinnlegg");
+            builder.setView(cbItemView);
+            builder.setPositiveButton("Legg til", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    String cbItemName = tvName.getText().toString();
+                    String cbItemPrice = tvPrice.getText().toString();
+                    String cbItemDescription = tvDescription.getText().toString();
+                    CBCategory category = (CBCategory)spCategory.getSelectedItem();
+                    String cbItemType = (String)spType.getSelectedItem();
+
+                    if (cbItemName.isEmpty() || cbItemPrice.isEmpty())
+                    {
+                        Toast.makeText(getActivity().getApplicationContext(), "Oppgi navn og pris som minimum.", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        // create new item
+                        CBItem item = new CBItem(String.format("%s_%s", cbItemName.replace(" ", "_"), cbItemType), category.getName());
+                        item.set_price(Float.parseFloat(cbItemPrice));
+                        item.set_displayName(cbItemName);
+                        item.set_unit(cbItemType);
+                        item.set_description(cbItemDescription);
+
+                        //verify that item does not already exist with same name
+                        if (MainActivity.cbmanager.addCBItem(item) == CBManager.ITEM_ADD_SUCCESS)
+                        {
+                            Toast.makeText(getActivity().getApplicationContext(), String.format("La til %s på menyen", cbItemName), Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(getActivity().getApplicationContext(), String.format("Mest sannsynlig finnes dette på menyen fra før."), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
+            builder.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Toast.makeText(cbItemView.getContext(), "avbryt", Toast.LENGTH_SHORT).show();
+                }
+            });
+            builder.create().show();
+
             return true;
         }
 

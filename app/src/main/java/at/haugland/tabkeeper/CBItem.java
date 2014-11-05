@@ -1,4 +1,4 @@
-package at.haugland.cbtab;
+package at.haugland.tabkeeper;
 
 import com.google.gson.annotations.Expose;
 

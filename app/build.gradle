@@ -4,7 +4,7 @@ android {
     compileSdkVersion 21
     buildToolsVersion "19.1.0"
     defaultConfig {
-        applicationId "at.haugland.cbtab"
+        applicationId "at.haugland.tabkeeper"
         minSdkVersion 15
         targetSdkVersion 21
         versionCode 1

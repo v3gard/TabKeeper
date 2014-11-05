@@ -1,4 +1,4 @@
-package at.haugland.cbtab;
+package at.haugland.tabkeeper;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -33,9 +33,11 @@ public final class CBManager
     public static final int DATA_SERIALIZE_SUCCESS = 1;
     public static final int DATA_DESERIALIZE_SUCCESS = 2;
     public static final int ITEM_REINITIALIZATION_SUCCESS = 3;
+    public static final int ITEM_ADD_SUCCESS = 4;
     public static final int DATA_SERIALIZE_FAIL = -1;
     public static final int DATA_DESERIALIZE_FAIL = -2;
     public static final int ITEM_REINITIALIZATION_FAIL = -3;
+    public static final int ITEM_ADD_FAIL = -4;
 
 
     private ArrayList<CBItem> _items;
@@ -136,6 +138,32 @@ public final class CBManager
             }
         }
         return null;
+    }
+    public int addCBItem(CBItem cbItem)
+    {
+        for (CBItem item : this.getItems())
+        {
+            if (item.getName().equalsIgnoreCase(cbItem.getName()))
+            {
+                return ITEM_ADD_FAIL;
+            }
+        }
+        this.getCategory(cbItem.getCategoryId()).addItem(cbItem);
+        _items.add(cbItem);
+        return ITEM_ADD_SUCCESS;
+    }
+    public ArrayList<String> getTypes()
+    {
+        //TODO: should change type from string to a custom Type object
+        ArrayList<String> types = new ArrayList<String>();
+        types.add("N/A");
+        types.add("bottle");
+        types.add("glass");
+        return types;
+    }
+    public ArrayList<CBCategory> getCategories()
+    {
+        return _categories;
     }
     public ArrayList<CBCategory> getDistinctCategories()
     {
