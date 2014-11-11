@@ -23,12 +23,14 @@ public class CBCart
     @Expose private CBKVStore _items;
     @Expose private Calendar _calendar;
     @Expose private Date _created;
+    @Expose private float _tips;
 
     public CBCart()
     {
         _items = new CBKVStore();
         _calendar = Calendar.getInstance();
         _created = _calendar.getTime();
+        _tips = 0;
     }
     private class CBKVStore implements Iterable<CBKeyValue>
     {
@@ -116,6 +118,14 @@ public class CBCart
        }
        return tmp;
     }
+    public void setTips(float tips)
+    {
+        this._tips = tips;
+    }
+    public float getTips()
+    {
+        return this._tips;
+    }
     public ArrayList<CBItem> getItemsAsArrayList()
     {
         return _items.keySet();
@@ -135,7 +145,7 @@ public class CBCart
     }
     public String getDisplayNameWithDayAndTime()
     {
-        return String.format("Barregning %s", this.getTimeCreated("dd.MM.yy hh:mm"));
+        return String.format("Barregning %s", this.getTimeCreated("dd.MM.yy HH:mm"));
     }
     public String getTimeCreated(String dateFormat)
     {

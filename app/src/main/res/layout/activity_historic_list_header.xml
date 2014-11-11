@@ -27,7 +27,23 @@
         android:id="@+id/historic_cart_size"
         android:layout_gravity="right"
         android:textColor="@android:color/white"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:minWidth="60dp"
+        android:textAlignment="textEnd"
+        android:gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tips"
+        android:padding="5dp"
+        android:id="@+id/historic_cart_tip"
+        android:layout_gravity="right"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:minWidth="60dp"
+        android:textAlignment="textEnd"
+        android:gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,5 +53,8 @@
         android:id="@+id/historic_cart_sum"
         android:layout_gravity="right"
         android:textColor="@android:color/white"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:minWidth="60dp"
+        android:textAlignment="textEnd"
+        android:gravity="center_horizontal" />
 </TableRow>

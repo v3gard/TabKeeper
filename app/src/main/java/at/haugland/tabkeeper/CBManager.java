@@ -64,6 +64,7 @@ public final class CBManager
         CBCategory beer = new CBCategory("beer", "Øl", "&#xf0fc;", 1);
         CBCategory beer_nonalcoholic = new CBCategory("beer_nonalcoholic", "Øl - Alkoholfri", "&#xf0fc;", 2);
         CBCategory wine = new CBCategory("wine", "Vin", "&#xf000;", 4);
+        //CBCategory other = new CBCategory("n/a", "Annet", "&#xf141;", 4);
         food.setImageIcon(R.drawable.fa_cutlery);
         beer.setImageIcon(R.drawable.fa_beer);
         beer_nonalcoholic.setImageIcon(R.drawable.fa_beer);
@@ -72,7 +73,7 @@ public final class CBManager
         _categories.add(beer_nonalcoholic);
         _categories.add(food);
         _categories.add(wine);
-
+        //_categories.add(other);
     }
     public int initialize_resources(Resources resources) {
         // read categories and items from resource data and populate _items.
@@ -113,6 +114,7 @@ public final class CBManager
                     item.set_description(data[5].replaceAll("^\"|\"$", ""));
                     _items.add(item);
                 } catch (Exception e) {
+                    // TODO we need to push all error notifications to the GUI level...
                     e.printStackTrace();
                     break;
                 }
@@ -121,6 +123,7 @@ public final class CBManager
         }
         catch (Exception e)
         {
+            // TODO we need to push all error notifications to the GUI level...
             e.printStackTrace();
         }
         if (_errors.size() > 0) {
@@ -232,6 +235,10 @@ public final class CBManager
     {
         return _historicCarts;
     }
+    public void removeCart(CBCart cart)
+    {
+        _historicCarts.remove(cart);
+    }
     public int SerializeData(Context context)
     {
         StorageContainer sc = new StorageContainer(this._cart, this._historicCarts, this._items, this._categories);
@@ -269,6 +276,7 @@ public final class CBManager
                 this._historicCarts = sc._historicCarts;
                 this._items = sc._cbItems;
                 this._categories = sc._cbCategories;
+
                 this.ReinitializeItems();
                 return DATA_DESERIALIZE_SUCCESS;
             }

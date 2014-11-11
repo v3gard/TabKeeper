@@ -69,7 +69,11 @@ public class CBItem
         this._description = description;
     }
     public void set_category(String categoryId) throws Exception {
+        /**
+         * categories are initialized in CBManager.initialize_categories()
+         */
         this._categoryId = categoryId;
+        if (this._categoryId.equalsIgnoreCase("")) this._categoryId = "n/a";
         CBCategory category = MainActivity.cbmanager.getCategory(this._categoryId);
         if (category == null)
         {

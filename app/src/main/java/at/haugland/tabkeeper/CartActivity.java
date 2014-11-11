@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,80 +137,74 @@ public class CartActivity extends Activity {
             // update listview header with date and total sum
             TextView tabNameDate = (TextView) findViewById(R.id.cart_name_date);
             TextView tabTotalSum = (TextView) findViewById(R.id.cart_total_sum);
+            TextView tabTip = (TextView) findViewById(R.id.tv_cart_tip);
+
             tabNameDate.setText(_currentCart.getDisplayNameWithDate());
-            tabTotalSum.setText(String.format("Sum: %.2f kr,-", _currentCart.calculateSum()));
+            tabTotalSum.setText(String.format("Sum: %.2f kr,-", _currentCart.calculateSum()+_currentCart.getTips()));
+            tabTip.setText(String.format("Tips: %.2f kr,-", _currentCart.getTips()));
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Pass
-        return true;
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actionmenu_cart, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass
-        return false;
-    }
-    private class CBCartAdapter extends BaseAdapter
-    {
-        LayoutInflater _layoutInflater;
-        CBCart _cbCart;
+        if (item.getItemId() == R.id.cart_actionitem_tip)
+        {
+            View tipView = getLayoutInflater().inflate(R.layout.dialog_tip, null);
 
-        public CBCartAdapter(Context context, int textViewResourceId, CBCart cbCart)
-        {
-            _layoutInflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-            _cbCart = cbCart;
-        }
-        @Override
-        public int getCount()
-        {
-            return _cbCart.size();
-        }
-        @Override
-        public AbstractMap.SimpleEntry<CBItem, Integer> getItem(int position)
-        {
-            CBItem item = _cbCart.getItemsAsArrayList().get(position);
-            Integer value = _cbCart.getItems().get(item);
-            return new AbstractMap.SimpleEntry<CBItem, Integer>(item, value);
-        }
-        @Override
-        public long getItemId(int position)
-        {
-            return 0;
-        }
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
-            CBCartViewHolder cbCartViewHolder;
-            if (convertView==null)
-            {
-                convertView = _layoutInflater.inflate(R.layout.activity_cart_list_item, null);
-                cbCartViewHolder = new CBCartViewHolder();
-                convertView.setTag(cbCartViewHolder);
-            }
-            else
-            {
-                cbCartViewHolder = (CBCartViewHolder)convertView.getTag();
-            }
-            CBItem cbItem = _cbCart.getItemsAsArrayList().get(position);
-            int cbValue = _cbCart.getItems().get(cbItem);
-            cbCartViewHolder.tvDisplayName = detail(convertView, R.id.cart_item_name, cbItem.getDisplayName());
-            cbCartViewHolder.tvAmount = detail(convertView, R.id.cart_item_amount, String.format("%d",cbValue));
-            cbCartViewHolder.tvTotal = detail(convertView, R.id.cart_item_price_sum, String.format("%.2f", cbValue*cbItem.getPrice()));
-//
-            return convertView;
-        }
-        private class CBCartViewHolder
-        {
-            TextView tvDisplayName, tvUnit, tvPrice, tvTotal, tvAmount;
-        }
-        private TextView detail(View v, Integer resourceId, String text)
-        {
-            TextView tv = (TextView) v.findViewById(resourceId);
-            tv.setText(text);
-            return tv;
-        }
+            final NumberPicker tipMajor = (NumberPicker) tipView.findViewById(R.id.np_tip_major);
+            final NumberPicker tipMinor = (NumberPicker) tipView.findViewById(R.id.np_tip_minor);
 
+            tipMajor.setMinValue(0);
+            tipMajor.setMaxValue(10000);
+            tipMinor.setMinValue(0);
+            tipMinor.setMaxValue(99);
+
+            tipMajor.setValue(Math.round((float)Math.floor(_currentCart.getTips())));
+            tipMinor.setValue(Math.round((float)(_currentCart.getTips()-Math.floor(_currentCart.getTips()))*100));
+
+            tipMajor.setSelected(false);
+            tipMinor.setSelected(false);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Gi tips");
+            builder.setView(tipView);
+            builder.setPositiveButton("Gi tips", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    float fTipMajor = tipMajor.getValue();
+                    float fTipMinor = (float)(tipMinor.getValue())/100;
+                    _currentCart.setTips(fTipMajor+fTipMinor);
+                    Toast.makeText(getApplicationContext(), String.format("Satte tipsen til %.2f kr,-", _currentCart.getTips()), Toast.LENGTH_SHORT).show();
+                    updateCart();
+                }
+            });
+            builder.setNegativeButton("Fjern tips", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    _currentCart.setTips(0);
+                    Toast.makeText(getApplicationContext(), String.format("Fjernet tipsen.", _currentCart.getTips()), Toast.LENGTH_SHORT).show();
+                    updateCart();
+                }
+            });
+            builder.setNeutralButton("Sett til 10%", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    float fTip = (float)(_currentCart.calculateSum()*0.1);
+                    _currentCart.setTips(fTip);
+                    Toast.makeText(getApplicationContext(), String.format("Satte tipsen til %.2f kr,-", _currentCart.getTips()), Toast.LENGTH_SHORT).show();
+                    updateCart();
+                }
+            });
+            builder.create().show();
+        }
+        return true;
     }
 }

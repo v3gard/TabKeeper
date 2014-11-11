@@ -220,8 +220,7 @@ public class MenuActivity extends Activity
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             _cart = MainActivity.cbmanager.getCurrentCart();
-                            if (_cart==null)
-                            {
+                            if (_cart == null) {
                                 MainActivity.cbmanager.createCart();
                                 _cart = MainActivity.cbmanager.getCurrentCart();
                                 Toast.makeText(view.getContext(), String.format("Opprettet ny barregning"), Toast.LENGTH_SHORT).show();
@@ -230,11 +229,16 @@ public class MenuActivity extends Activity
                             Toast.makeText(view.getContext(), String.format("La til %d %s", activeItemNumberPicker.getValue(), item.getDisplayName()), Toast.LENGTH_SHORT).show();
                         }
                     });
-                    builder.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
+                    builder.setNeutralButton("Endre", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast t = Toast.makeText(view.getContext(), "avbryt", Toast.LENGTH_SHORT);
-                            t.show();
+                            Toast.makeText(view.getContext(), "Ikke implementert enda.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    builder.setNegativeButton("Slett", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(view.getContext(), "Ikke implementert enda.", Toast.LENGTH_SHORT).show();
                         }
                     });
                     builder.create().show();
